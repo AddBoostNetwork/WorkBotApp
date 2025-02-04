@@ -5,16 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Telegram Mini App</title>
   <style>
+    /* Общие стили для body */
     body {
       font-family: Arial, sans-serif;
       text-align: center;
       padding: 20px;
+      background-color: #f0f8ff; /* Светло-голубой фон */
     }
+
+    /* Стили для приветствия */
+    #greeting {
+      color: #2e8b57; /* Темно-зеленый цвет текста */
+      font-size: 24px; /* Размер текста 24px */
+      margin-bottom: 20px;
+    }
+
+    /* Стили для текста под приветствием */
+    p {
+      color: #333333; /* Темно-серый цвет текста */
+      font-size: 18px; /* Размер текста 18px */
+    }
+
+    /* Стили для кнопки */
     button {
       padding: 10px 20px;
       font-size: 16px;
       margin-top: 20px;
       cursor: pointer;
+      background-color: #ff6347; /* Томатный цвет фона кнопки */
+      color: white; /* Белый цвет текста кнопки */
+      border: none; /* Убираем границу */
+      border-radius: 5px; /* Закругляем углы */
+    }
+
+    /* Стили для второй страницы */
+    #page2 {
+      display: none;
+      color: #4b0082; /* Индиго цвет текста */
+      font-size: 20px; /* Размер текста 20px */
     }
   </style>
 </head>
@@ -25,7 +53,7 @@
     <button onclick="showPage2()">Далее</button>
   </div>
 
-  <div id="page2" style="display: none;">
+  <div id="page2">
     <h1>Здесь будет вся информация</h1>
   </div>
 
