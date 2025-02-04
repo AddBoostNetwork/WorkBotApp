@@ -20,7 +20,7 @@
 </head>
 <body>
   <div id="page1">
-    <h1 id="greeting">Привет, {name}!</h1>
+    <h1 id="greeting">Привет, друг!</h1>
     <p>Рады, что ты присоединяешься к нам.</p>
     <button onclick="showPage2()">Далее</button>
   </div>
@@ -30,16 +30,18 @@
   </div>
 
   <script>
-    // Получаем данные пользователя из Telegram
+    // Получаем данные пользователя из Telegram Web App
     const tg = window.Telegram.WebApp;
     const user = tg.initDataUnsafe.user;
 
-    // Заменяем {name} на имя пользователя
+    // Находим элемент для приветствия
     const greetingElement = document.getElementById('greeting');
+
+    // Если данные пользователя доступны, подставляем имя
     if (user && user.first_name) {
       greetingElement.textContent = `Привет, ${user.first_name}!`;
     } else {
-      greetingElement.textContent = 'Привет, друг!';
+      greetingElement.textContent = 'Привет, друг!'; // Запасной вариант
     }
 
     // Функция для перехода на вторую страницу
