@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Telegram Mini App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    button {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-top: 20px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <div id="page1">
+    <h1 id="greeting">Привет, {name}!</h1>
+    <p>Рады, что ты присоединяешься к нам.</p>
+    <button onclick="showPage2()">Далее</button>
+  </div>
+
+  <div id="page2" style="display: none;">
+    <h1>Здесь будет вся информация</h1>
+  </div>
+
+  <script>
+    // Получаем данные пользователя из Telegram
+    const tg = window.Telegram.WebApp;
+    const user = tg.initDataUnsafe.user;
+
+    // Заменяем {name} на имя пользователя
+    const greetingElement = document.getElementById('greeting');
+    if (user && user.first_name) {
+      greetingElement.textContent = `Привет, ${user.first_name}!`;
+    } else {
+      greetingElement.textContent = 'Привет, друг!';
+    }
+
+    // Функция для перехода на вторую страницу
+    function showPage2() {
+      document.getElementById('page1').style.display = 'none';
+      document.getElementById('page2').style.display = 'block';
+    }
+  </script>
+</body>
+</html>
