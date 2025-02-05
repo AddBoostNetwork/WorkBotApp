@@ -5,86 +5,117 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Telegram Mini App</title>
   <style>
-    /* Общие стили для body */
     body {
-      font-family: Arial, sans-serif;
+      font-family: Arial ,sans-serif;
       text-align: left;
       padding: 20px;
-      background-color: #000; /* Темный фон */
-      overflow: hidden; /* Скрываем всё, что выходит за пределы экрана */
-      position: relative;
-      margin: 0;
+      background-color: #0d1b2a;
     }
 
-    /* Стили для звезд */
-    .star {
-      position: absolute;
-      width: 2px;
-      height: 2px;
-      background-color: #fff; /* Белый цвет звезд */
-      border-radius: 50%;
-      opacity: 0; /* Начальная прозрачность */
-      animation: twinkle 2s infinite ease-in-out;
-    }
-
-    /* Анимация мерцания звезд */
-    @keyframes twinkle {
-      0%, 100% {
-        opacity: 0;
-      }
-      50% {
-        opacity: 1;
-      }
-    }
-
-    /* Анимация движения звезд */
-    @keyframes moveStar {
-      0% {
-        transform: translateY(0) translateX(0);
-      }
-      100% {
-        transform: translateY(-100vh) translateX(-100vw);
-      }
-    }
-
-    /* Стили для приветствия */
     #greeting {
-      color: #6b92ab;
+      color: #e0e1dd;
       font-size: 24px;
       margin-bottom: 20px;
-      position: relative;
-      z-index: 1;
     }
 
-    /* Стили для текста под приветствием */
     p {
-      color: #6b92ab;
+      color: #e0e1dd;
       font-size: 22px;
       position: relative;
-      z-index: 1;
+      z-index: 2;
     }
 
-    /* Стили для кнопки */
     button {
       padding: 30px 20px;
       font-size: 16px;
       margin-top: 20px;
       cursor: pointer;
-      background-color: #2a3b98;
-      color: rgb(162, 175, 212);
+      background-color: #415a77;
+      color: #e0e1dd;
       border: none;
       border-radius: 10px;
-      position: relative;
+      display: block;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    #page2 {
+      display: none;
+      color: #e0e1dd;
+      font-size: 20px;
+    }
+
+    .dollar-sign {
+      position: fixed;
+      right: 10%;
+      top: 50%;
+      transform: translateY(-50%) scaleX(-1);
+      width: 150px;
+      height: 150px;
       z-index: 1;
     }
 
-    /* Стили для второй страницы */
-    #page2 {
-      display: none;
-      color: #6b92ab;
-      font-size: 20px;
-      position: relative;
-      z-index: 1;
+    .dollar-path {
+      fill: none;
+      stroke: #6a994e;
+      stroke-width: 8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      stroke-dasharray: 350;
+      stroke-dashoffset: 350;
+      animation: drawDollar 5s infinite ease-in-out;
+      filter: drop-shadow(0px 0px 3px rgba(106, 153, 78, 0.5));
+    }
+
+    .dollar-highlight {
+      fill: none;
+      stroke: #a7c957;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.7;
+      animation: glowEffect 5s infinite ease-in-out;
+    }
+
+    .dollar-shadow {
+      fill: none;
+      stroke: #386641;
+      stroke-width: 10;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+      opacity: 0.3;
+      filter: blur(4px);
+    }
+
+    @keyframes drawDollar {
+      0% {
+        stroke-dashoffset: 350;
+        opacity: 0;
+      }
+      20% {
+        opacity: 1;
+      }
+      40% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+      60% {
+        stroke-dashoffset: 0;
+        opacity: 1;
+      }
+      80% {
+        opacity: 1;
+      }
+      100% {
+        stroke-dashoffset: -350;
+        opacity: 0;
+      }
+    }
+
+    @keyframes glowEffect {
+      0% { opacity: 0; }
+      50% { opacity: 0.7; }
+      100% { opacity: 0; }
     }
   </style>
 </head>
@@ -103,62 +134,19 @@
         <br>
         Нажмите «Далее», чтобы выбрать категорию и узнать больше!</p>
     <button onclick="showPage2()">Далее</button>
+
+    <svg class="dollar-sign" viewBox="0 0 100 100">
+      <!-- Тень -->
+      <path class="dollar-shadow" d="M50,20 L50,80 M35,30 C35,30 50,25 65,30 C80,35 65,45 50,45 C35,45 20,55 35,60 C50,65 65,60 65,60" />
+      <!-- Основной путь -->
+      <path class="dollar-path" d="M50,20 L50,80 M35,30 C35,30 50,25 65,30 C80,35 65,45 50,45 C35,45 20,55 35,60 C50,65 65,60 65,60" />
+      <!-- Подсветка -->
+      <path class="dollar-highlight" d="M50,20 L50,80 M35,30 C35,30 50,25 65,30 C80,35 65,45 50,45 C35,45 20,55 35,60 C50,65 65,60 65,60" />
+    </svg>
   </div>
 
   <div id="page2">
     <h1>Здесь будет вся информация</h1>
   </div>
-
-  <!-- Звезды -->
-  <div class="star" style="top: 10%; left: 20%; animation-delay: 0s;"></div>
-  <div class="star" style="top: 30%; left: 50%; animation-delay: 1s;"></div>
-  <div class="star" style="top: 50%; left: 70%; animation-delay: 2s;"></div>
-  <div class="star" style="top: 80%; left: 10%; animation-delay: 3s;"></div>
-  <div class="star" style="top: 20%; left: 90%; animation-delay: 4s;"></div>
-  <div class="star" style="top: 60%; left: 40%; animation-delay: 5s;"></div>
-  <div class="star" style="top: 90%; left: 60%; animation-delay: 6s;"></div>
-  <div class="star" style="top: 40%; left: 30%; animation-delay: 7s;"></div>
-  <div class="star" style="top: 70%; left: 80%; animation-delay: 8s;"></div>
-  <div class="star" style="top: 15%; left: 45%; animation-delay: 9s;"></div>
-
-  <script>
-    // Получаем данные пользователя из Telegram Web App
-    const tg = window.Telegram.WebApp;
-    const user = tg.initDataUnsafe.user;
-
-    // Находим элемент для приветствия
-    const greetingElement = document.getElementById('greeting');
-
-    // Если данные пользователя доступны, подставляем имя
-    if (user && user.first_name) {
-      greetingElement.textContent = `Привет, ${user.first_name}!`;
-    } else {
-      greetingElement.textContent = 'Привет, друг!'; // Запасной вариант
-    }
-
-    // Функция для перехода на вторую страницу
-    function showPage2() {
-      document.getElementById('page1').style.display = 'none';
-      document.getElementById('page2').style.display = 'block';
-    }
-
-    // Динамическое создание звезд
-    function createStars() {
-      const starCount = 100; // Количество звезд
-      const container = document.body;
-
-      for (let i = 0; i < starCount; i++) {
-        const star = document.createElement('div');
-        star.classList.add('star');
-        star.style.top = `${Math.random() * 100}%`;
-        star.style.left = `${Math.random() * 100}%`;
-        star.style.animationDelay = `${Math.random() * 10}s`;
-        container.appendChild(star);
-      }
-    }
-
-    // Вызов функции для создания звезд
-    createStars();
-  </script>
 </body>
 </html>
