@@ -7,36 +7,30 @@
   <style>
     /* Общие стили для body */
     body {
-  font-family: Arial, sans-serif;
-  text-align: left;
-  padding: 20px;
-  background: linear-gradient(270deg, #091a28, #1a2a3b, #2a3b98, #3c4a6b);
-  background-size: 400% 400%;
-  animation: GradientBackground 10s ease infinite;
-}
+      font-family: Arial, sans-serif;
+      text-align: left;
+      padding: 20px;
+      background-color: #091a28; /* Тёмный фон */
+      position: relative;
+      overflow: hidden; /* Скрываем всё, что выходит за пределы */
+    }
 
-@keyframes GradientBackground {
-  0% {
-    background-position: 0% 50%;
-  }
-  50% {
-    background-position: 100% 50%;
-  }
-  100% {
-    background-position: 0% 50%;
-  }
-}
+    /* Контейнер для первой страницы */
+    #page1 {
+      position: relative;
+      z-index: 1; /* Чтобы текст был поверх анимации */
+    }
 
     /* Стили для приветствия */
     #greeting {
-      color: #6b92ab; /* Темно-зеленый цвет текста */
+      color: #6b92ab; /* Цвет текста */
       font-size: 24px; /* Размер текста 24px */
       margin-bottom: 20px;
     }
 
     /* Стили для текста под приветствием */
     p {
-      color: #6b92ab; /* Темно-серый цвет текста */
+      color: #6b92ab; /* Цвет текста */
       font-size: 22px; /* Размер текста 18px */
     }
 
@@ -46,8 +40,8 @@
       font-size: 16px;
       margin-top: 20px;
       cursor: pointer;
-      background-color: #2a3b98; /* Томатный цвет фона кнопки */
-      color: rgb(162, 175, 212); /* Белый цвет текста кнопки */
+      background-color: #2a3b98; /* Цвет фона кнопки */
+      color: rgb(162, 175, 212); /* Цвет текста кнопки */
       border: none; /* Убираем границу */
       border-radius: 10px; /* Закругляем углы */
     }
@@ -55,8 +49,44 @@
     /* Стили для второй страницы */
     #page2 {
       display: none;
-      color: #6b92ab; /* Индиго цвет текста */
+      color: #6b92ab; /* Цвет текста */
       font-size: 20px; /* Размер текста 20px */
+    }
+
+    /* Анимация для значка "$" */
+    @keyframes drawAndFade {
+      0% {
+        opacity: 0;
+        transform: translateX(100%) scale(0.5);
+      }
+      25% {
+        opacity: 1;
+        transform: translateX(50%) scale(1);
+      }
+      50% {
+        opacity: 1;
+        transform: translateX(0%) scale(1);
+      }
+      75% {
+        opacity: 1;
+        transform: translateX(-50%) scale(1);
+      }
+      100% {
+        opacity: 0;
+        transform: translateX(-100%) scale(0.5);
+      }
+    }
+
+    /* Элемент для анимации "$" */
+    #page1::after {
+      content: "$";
+      position: absolute;
+      top: 50%;
+      right: -100px; /* Начинаем за пределами экрана */
+      font-size: 100px;
+      color: rgba(162, 175, 212, 0.5); /* Полупрозрачный цвет */
+      animation: drawAndFade 6s infinite ease-in-out; /* Анимация */
+      z-index: 0; /* Чтобы анимация была под текстом */
     }
   </style>
 </head>
