@@ -1,152 +1,392 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Telegram Mini App</title>
-  <style>
-    body {
-      font-family: Arial ,sans-serif;
-      text-align: left;
-      padding: 20px;
-      background-color: #0d1b2a;
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Telegram Mini App</title>
+    <script src="https://cdn.gpteng.co/gptengineer.js" type="module"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
 
-    #greeting {
-      color: #e0e1dd;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
+        body {
+            background-color: #0d1b2a;
+            min-height: 100vh;
+            padding: 20px;
+            overflow-x: hidden;
+        }
 
-    p {
-      color: #e0e1dd;
-      font-size: 22px;
-      position: relative;
-      z-index: 2;
-    }
+        .page {
+            display: none;
+            position: relative;
+            animation: fadeIn 0.5s ease-out;
+            min-height: calc(100vh - 40px);
+        }
 
-    button {
-      padding: 30px 20px;
-      font-size: 16px;
-      margin-top: 20px;
-      cursor: pointer;
-      background-color: #415a77;
-      color: #e0e1dd;
-      border: none;
-      border-radius: 10px;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
+        #page1 {
+            display: block;
+        }
 
-    #page2 {
-      display: none;
-      color: #e0e1dd;
-      font-size: 20px;
-    }
+        button {
+            padding: 15px 25px;
+            font-size: 18px;
+            margin: 10px 0;
+            cursor: pointer;
+            background: rgba(65, 90, 119, 0.3);
+            color: #e0e1dd;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+            width: 100%;
+            max-width: 300px;
+        }
 
-    .dollar-sign {
-      position: fixed;
-      right: 10%;
-      top: 50%;
-      transform: translateY(-50%) scaleX(-1);
-      width: 150px;
-      height: 150px;
-      z-index: 1;
-    }
+        button:hover {
+            background: rgba(65, 90, 119, 0.5);
+            transform: translateY(-2px);
+        }
 
-    .dollar-path {
-      fill: none;
-      stroke: #6a994e;
-      stroke-width: 8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      stroke-dasharray: 350;
-      stroke-dashoffset: 350;
-      animation: drawDollar 5s infinite ease-in-out;
-      filter: drop-shadow(0px 0px 3px rgba(106, 153, 78, 0.5));
-    }
+        .back-button {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 1000;
+            width: auto;
+            padding: 10px 20px;
+        }
 
-    .dollar-highlight {
-      fill: none;
-      stroke: #a7c957;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0.7;
-      animation: glowEffect 5s infinite ease-in-out;
-    }
+        h1, h3, p {
+            color: #e0e1dd;
+            position: relative;
+            z-index: 2;
+        }
 
-    .dollar-shadow {
-      fill: none;
-      stroke: #386641;
-      stroke-width: 10;
-      stroke-linecap: round;
-      stroke-linejoin: round;
-      opacity: 0.3;
-      filter: blur(4px);
-    }
+        #greeting {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
 
-    @keyframes drawDollar {
-      0% {
-        stroke-dashoffset: 350;
-        opacity: 0;
-      }
-      20% {
-        opacity: 1;
-      }
-      40% {
-        stroke-dashoffset: 0;
-        opacity: 1;
-      }
-      60% {
-        stroke-dashoffset: 0;
-        opacity: 1;
-      }
-      80% {
-        opacity: 1;
-      }
-      100% {
-        stroke-dashoffset: -350;
-        opacity: 0;
-      }
-    }
+        p {
+            font-size: 22px;
+            line-height: 1.5;
+        }
 
-    @keyframes glowEffect {
-      0% { opacity: 0; }
-      50% { opacity: 0.7; }
-      100% { opacity: 0; }
-    }
-  </style>
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Большой знак вопроса на странице действий */
+        .big-question-mark {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 400px;
+            color: rgba(155, 135, 245, 0.1);
+            z-index: 1;
+            animation: pulse 4s infinite ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(0.8); opacity: 0.1; }
+            50% { transform: scale(1.2); opacity: 0.2; }
+        }
+
+        /* Анимированный график */
+        .chart-background {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            opacity: 0.1;
+        }
+
+        .chart-line {
+            fill: none;
+            stroke: #F97316;
+            stroke-width: 4;
+            stroke-linecap: round;
+            stroke-dasharray: 1000;
+            stroke-dashoffset: 1000;
+            animation: drawChart 4s infinite ease-in-out;
+        }
+
+        @keyframes drawChart {
+            0% { stroke-dashoffset: 1000; }
+            50% { stroke-dashoffset: 0; }
+            100% { stroke-dashoffset: -1000; }
+        }
+
+        /* Анимированные деньги */
+        .money-rain {
+            position: fixed;
+            inset: 0;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .money-bill {
+            position: absolute;
+            width: 60px;
+            height: 30px;
+            background: linear-gradient(45deg, #6a994e, #a7c957);
+            border-radius: 4px;
+            opacity: 0.2;
+            animation: moneyFall 6s linear infinite;
+        }
+
+        @keyframes moneyFall {
+            0% {
+                transform: translateY(-100px) rotate(0deg);
+                opacity: 0;
+            }
+            10% { opacity: 0.2; }
+            90% { opacity: 0.2; }
+            100% {
+                transform: translateY(100vh) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .content-wrapper {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: calc(100vh - 100px);
+            padding-bottom: 80px;
+        }
+
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .help-content {
+            background: rgba(65, 90, 119, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            max-width: 800px;
+            width: 100%;
+        }
+
+        .description-content {
+            background: rgba(65, 90, 119, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            margin: 10px 0;
+            max-width: 800px;
+            width: 100%;
+        }
+    </style>
 </head>
 <body>
-  <div id="page1">
-    <h3 id="greeting">Привет, друг!</h3><br>
-    <p>Добро пожаловать! 👋<br>
-        <br>
-       Здесь вы сможете найти полезные возможности:<br>
-        <br>
-        ✅ Вакансии<br>
-        <br>
-        ✅ Выплаты<br>
-        <br>
-        ✅ Промокоды<br>
-        <br>
-        Нажмите «Далее», чтобы выбрать категорию и узнать больше!</p>
-    <button onclick="showPage2()">Далее</button>
+    <div id="page1" class="page">
+        <div class="content-wrapper">
+            <h3 id="greeting">Привет, друг!</h3>
+            <div class="glassmorphic">
+                <p>Добро пожаловать! 👋<br>
+                    <br>
+                    Здесь вы сможете найти полезные возможности:<br>
+                    <br>
+                    ✅ Вакансии<br>
+                    <br>
+                    ✅ Выплаты<br>
+                    <br>
+                    ✅ Промокоды<br>
+                    <br>
+                    Нажмите «Далее», чтобы выбрать категорию и узнать больше!</p>
+            </div>
+            <button onclick="showPage('page2')">Далее</button>
+        </div>
+    </div>
 
-    <svg class="dollar-sign" viewBox="0 0 100 100">
-      <!-- Тень -->
-      <path class="dollar-shadow" d="M50,20 L50,80 M35,30 C35,30 50,25 65,30 C80,35 65,45 50,45 C35,45 20,55 35,60 C50,65 65,60 65,60" />
-      <!-- Основной путь -->
-      <path class="dollar-path" d="M50,20 L50,80 M35,30 C35,30 50,25 65,30 C80,35 65,45 50,45 C35,45 20,55 35,60 C50,65 65,60 65,60" />
-      <!-- Подсветка -->
-      <path class="dollar-highlight" d="M50,20 L50,80 M35,30 C35,30 50,25 65,30 C80,35 65,45 50,45 C35,45 20,55 35,60 C50,65 65,60 65,60" />
-    </svg>
-  </div>
+    <div id="page2" class="page">
+        <div class="big-question-mark">?</div>
+        <div class="content-wrapper">
+            <h1>Выберите действие</h1>
+            <button onclick="showPage('categoryPage')">Выбор категории</button>
+            <button onclick="showPage('helpPage')">Помощь</button>
+            <button class="back-button" onclick="showPage('page1')">← Назад</button>
+        </div>
+    </div>
 
-  <div id="page2">
-    <h1>Здесь будет вся информация</h1>
-  </div>
+    <div id="categoryPage" class="page">
+        <svg class="chart-background" viewBox="0 0 1000 400">
+            <path class="chart-line" d="M0,200 Q250,100 500,300 T1000,150" />
+        </svg>
+        <div class="content-wrapper">
+            <h1>Выберите категорию</h1>
+            <div id="categoriesContainer" class="category-grid"></div>
+            <button class="back-button" onclick="showPage('page2')">← Назад</button>
+        </div>
+    </div>
+
+    <div id="elementsPage" class="page">
+        <div class="money-rain" id="moneyContainer"></div>
+        <div class="content-wrapper">
+            <h1 id="categoryTitle">Элементы категории</h1>
+            <div id="elementsContainer"></div>
+            <button class="back-button" onclick="showPage('categoryPage')">← Назад</button>
+        </div>
+    </div>
+
+    <div id="helpPage" class="page">
+        <div class="content-wrapper">
+            <div class="help-content">
+                <h1>Техническая поддержка</h1>
+                <p>Если у вас возникли вопросы или проблемы, наша служба поддержки всегда готова помочь!</p>
+                <p>Время работы: 24/7</p>
+                <p>Контакты поддержки:</p>
+                <p>Email: support@example.com</p>
+                <p>Telegram: @support_bot</p>
+            </div>
+            <button class="back-button" onclick="showPage('page2')">← Назад</button>
+        </div>
+    </div>
+
+    <div id="descriptionPage" class="page">
+        <div class="content-wrapper">
+            <div class="description-content">
+                <h1 id="elementTitle"></h1>
+                <p id="elementDescription"></p>
+            </div>
+            <button class="back-button" onclick="showPage('elementsPage')">← Назад</button>
+        </div>
+    </div>
+
+    <script>
+        const categories = [
+            {
+                name: "Вакансии",
+                emoji: "💼",
+                elements: [
+                    {
+                        name: "Курьер",
+                        description: "Работа курьером в службе доставки. Свободный график, высокая оплата."
+                    },
+                    {
+                        name: "Машинист",
+                        description: "Вакансия машиниста. Полный рабочий день, официальное трудоустройство."
+                    }
+                ]
+            },
+            {
+                name: "Выплаты",
+                emoji: "💰",
+                elements: [
+                    {
+                        name: "Зарплата",
+                        description: "Информация о начислении заработной платы и бонусов."
+                    },
+                    {
+                        name: "Премии",
+                        description: "Система премирования и дополнительных выплат."
+                    }
+                ]
+            },
+            {
+                name: "Промокоды",
+                emoji: "🎟️",
+                elements: [
+                    {
+                        name: "Скидки",
+                        description: "Актуальные промокоды на скидки в различных сервисах."
+                    },
+                    {
+                        name: "Бонусы",
+                        description: "Промокоды на дополнительные бонусы и привилегии."
+                    }
+                ]
+            }
+        ];
+
+        let currentCategory = null;
+
+        // Функция показа страницы
+        function showPage(pageId) {
+            document.querySelectorAll('.page').forEach(page => {
+                page.style.display = 'none';
+            });
+            document.getElementById(pageId).style.display = 'block';
+
+            if (pageId === 'categoryPage') {
+                renderCategories();
+            }
+            if (pageId === 'elementsPage') {
+                createMoneyAnimation();
+            }
+        }
+
+        // Рендер категорий
+        function renderCategories() {
+            const container = document.getElementById('categoriesContainer');
+            container.innerHTML = '';
+            
+            categories.forEach(category => {
+                const button = document.createElement('button');
+                button.className = 'category-card glassmorphic';
+                button.innerHTML = `
+                    <div class="emoji">${category.emoji}</div>
+                    <div>${category.name}</div>
+                `;
+                button.onclick = () => showElements(category);
+                container.appendChild(button);
+            });
+        }
+
+        // Показ элементов категории
+        function showElements(category) {
+            currentCategory = category;
+            document.getElementById('categoryTitle').textContent = category.name;
+            const container = document.getElementById('elementsContainer');
+            container.innerHTML = '';
+            
+            category.elements.forEach(element => {
+                const button = document.createElement('button');
+                button.className = 'glassmorphic';
+                button.textContent = element.name;
+                button.onclick = () => showDescription(element);
+                container.appendChild(button);
+            });
+            
+            showPage('elementsPage');
+        }
+
+        // Показ описания элемента
+        function showDescription(element) {
+            document.getElementById('elementTitle').textContent = element.name;
+            document.getElementById('elementDescription').textContent = element.description;
+            showPage('descriptionPage');
+        }
+
+        // Создание анимации денег
+        function createMoneyAnimation() {
+            const container = document.getElementById('moneyContainer');
+            container.innerHTML = '';
+            
+            for (let i = 0; i < 20; i++) {
+                const money = document.createElement('div');
+                money.className = 'money-bill';
+                money.style.left = `${Math.random() * 100}%`;
+                money.style.animationDelay = `${Math.random() * 6}s`;
+                container.appendChild(money);
+            }
+        }
+    </script>
 </body>
 </html>
