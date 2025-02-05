@@ -7,11 +7,25 @@
   <style>
     /* Общие стили для body */
     body {
-      font-family: Arial ,sans-serif;
-      text-align: left;
-      padding: 20px;
-      background-color: #091a28; /* Светло-голубой фон */
-    }
+  font-family: Arial, sans-serif;
+  text-align: left;
+  padding: 20px;
+  background: linear-gradient(270deg, #091a28, #1a2a3b, #2a3b98, #3c4a6b);
+  background-size: 400% 400%;
+  animation: GradientBackground 15s ease infinite;
+}
+
+@keyframes GradientBackground {
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
+}
 
     /* Стили для приветствия */
     #greeting {
